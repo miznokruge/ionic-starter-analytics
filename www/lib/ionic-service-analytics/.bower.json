@@ -1,0 +1,31 @@
+{
+  "name": "ionic-service-analytics",
+  "homepage": "http://ionic.io",
+  "authors": [
+    "Max Lynch <max@ionicframework.com>"
+  ],
+  "description": "Ionic Mobile Platform Analytics client",
+  "main": "ionic-analytics.js",
+  "license": "Apache2",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "ionic-service-core": ">=0.0.1"
+  },
+  "devDependencies": {},
+  "_release": "d6c15b8845",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "d6c15b8845b8d7b25fa7ce88cbf4b1a93d4bfbe6"
+  },
+  "_source": "git://github.com/driftyco/ionic-service-analytics.git",
+  "_target": "*",
+  "_originalSource": "ionic-service-analytics",
+  "_direct": true
+}
