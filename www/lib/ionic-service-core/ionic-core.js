@@ -241,6 +241,7 @@ function($q, $timeout, $http, persistentStorage, $ionicApp) {
   if (deviceCordova.model) device.model = deviceCordova.model;
   if (deviceCordova.platform) device.platform = deviceCordova.platform;
   if (deviceCordova.version) device.version = deviceCordova.version;
+  if (deviceCordova.uuid) device.uuid = deviceCordova.uuid;
 
   // Flag if we've changed anything on our user
   var dirty = false;
@@ -275,8 +276,13 @@ function($q, $timeout, $http, persistentStorage, $ionicApp) {
   return {
     /**
      * Push a value to the array with the given key.
+     * @param key the key
+     * @param value the value
+     * @param isUnique whether to only push if it doesn't exist in the set
+     *
      */
-    push: function(key, value) {
+
+    _op: function(key, value, type) {
       var u = user.user_id;
       if(!u) {
         throw new Error("Please call identify with a user_id before calling push");
@@ -284,35 +290,33 @@ function($q, $timeout, $http, persistentStorage, $ionicApp) {
       var o = {};
       o['user_id'] = u;
       o[key] = value;
-      return $http.post($ionicApp.getApiUrl() + '/api/v1/app/' + $ionicApp.getId() + '/users/push', o);
+
+      return $http.post($ionicApp.getApiUrl() + '/api/v1/app/' + $ionicApp.getId() + '/users/' + type, o);
+    },
+    push: function(key, value, isUnique) {
+      if(isUnique) {
+        return this._op(key, value, 'pushUnique');
+      } else {
+        return this._op(key, value, 'push');
+      }
+    },
+    pull: function(key, value) {
+      return this._op(key, value, 'pull');
     },
     set: function(key, value) {
-      var u = user.user_id;
-      if(!u) {
-        throw new Error("Please call identify with a user_id before calling set");
-      }
-
-      var o = {};
-      o['user_id'] = u;
-      o[key] = value;
-      return $http.post($ionicApp.getApiUrl() + '/api/v1/app/' + $ionicApp.getId() + '/users/set', o);
+      return this._op(key, value, 'set');
+    },
+    unset: function(key) {
+      return this._op(key, '', 'unset');
+    },
+    generateGUID: function() {
+      return generateGuid();
     },
     identify: function(userData) {
-      if (userData._id) {
-        var msg = 'You cannot override the _id property on users.';
-        throw new Error(msg)
-      }
-
       if (!userData.user_id) {
         var msg = 'You must supply a unique user_id field.';
         throw new Error(msg)
       }
-
-      /*
-      if(!userData.user_id) {
-        userData.user_id = generateGuid();
-      }
-      */
 
       // Copy all the data into our user object
       angular.extend(user, userData);
