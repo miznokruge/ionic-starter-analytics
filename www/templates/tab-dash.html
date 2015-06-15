@@ -4,8 +4,11 @@
       <div class="item item-divider">Recent Updates</div>
       <div class="item item-body">
         <div>
-          There is a fire in <b>sector 3</b>
+          There is a fire in <b>sector {{ sectorNumber }}</b>
         </div>
+        <button ion-track-tap="Extinguish Fire" ion-track-data="{ sector: sectorNumber }" class="button button-assertive">
+          Extinguish
+        </button>
       </div>
     </div>
     <div class="list card">
