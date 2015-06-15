@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ionic.service.core', 'ionic.service.analytics'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ionic.service.core',  'ionic.service.analytics'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -21,20 +21,26 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   });
 })
 
-.run(['$ionicUser', function($ionicUser) {
-  $ionicUser.identify({
-    name: 'Jamie',
-    email: 'hi@drifty.com',
-    user_id: ionic.Platform.device().uuid || $ionicUser.generateGUID()
-  });
+.config(['$ionicAppProvider', function($ionicAppProvider) {
+  // Identify app
+  $ionicAppProvider.identify({
+    // The App ID for the server
+    app_id: '<YOUR APP ID>',
+    // The API key all services will use for this app
+    api_key: '<YOUR API KEY>'
+  })
 }])
 
-.config(['$ionicAppProvider', function($ionicAppProvider) {
-  $ionicAppProvider.identify({
-    // Get these values from the Settings page on the dash
-    app_id: '<Your app id>',
-    api_key: '<Your API key>'
-    api_write_key: '<Your API write key>'
+.run(['$ionicAnalytics', function($ionicAnalytics) {
+  
+  $ionicAnalytics.register();
+
+  $ionicAnalytics.track('My Event', {
+    my_data: 12,
+    my_complex_data: {
+      complex_a: 13,
+      complex_b: 14
+    }
   });
 }])
 
